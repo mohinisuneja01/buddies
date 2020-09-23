@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "1065515749075",
+    "firebase_url": "https://questionstrom-fb2a4.firebaseio.com",
+    "project_id": "questionstrom-fb2a4",
+    "storage_bucket": "questionstrom-fb2a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065515749075:android:591f10cc9d4ceaa2348e26",
+        "android_client_info": {
+          "package_name": "com.example.buddies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065515749075-b584q7u76lee9aqg70h8ka2h42foqhp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.buddies",
+            "certificate_hash": "f3c916dd76059d14335af88db0a62100a9a934c8"
+          }
+        },
+        {
+          "client_id": "1065515749075-c6t9nte81lpftr721g1f7dtf6c798dd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE1huxreKDiI4y-ehpxzpr67xX3mFyzAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1065515749075-c6t9nte81lpftr721g1f7dtf6c798dd8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1065515749075-mlcb9tv9og3qirep2etorm40n738f6l3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.questionstorming"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065515749075:android:f756d81a1ba10b2f348e26",
+        "android_client_info": {
+          "package_name": "com.example.questionstorming"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065515749075-12fbvpu2ui1rhj5k6n3qiudd3m3e0cql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.questionstorming",
+            "certificate_hash": "f3c916dd76059d14335af88db0a62100a9a934c8"
+          }
+        },
+        {
+          "client_id": "1065515749075-c6t9nte81lpftr721g1f7dtf6c798dd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE1huxreKDiI4y-ehpxzpr67xX3mFyzAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1065515749075-c6t9nte81lpftr721g1f7dtf6c798dd8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1065515749075-mlcb9tv9og3qirep2etorm40n738f6l3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.questionstorming"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
