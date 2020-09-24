@@ -16,6 +16,7 @@ class AuthenticationScreen extends StatefulWidget {
   _AuthenticationScreenState createState() => _AuthenticationScreenState(verificationId: verificationId,auth: auth,phone: phone);
 }
 
+
 class _AuthenticationScreenState extends State<AuthenticationScreen>  {
   @override
   void initState() {
@@ -25,7 +26,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>  {
   int _counter = 60;
   Timer _timer;
   int check=0;
-
   void _startTimer() {
     _counter = 60;
     if (_timer != null) {
@@ -106,8 +106,11 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>  {
                       ),
                       SizedBox(height: 25,),
                       Center(child:
+
                       Text((_counter>9)?'00:$_counter':'00:0$_counter',style: TextStyle(color: (_counter!=0)?Colors.grey[450]:Colors.grey[350],fontSize: 18),)
                        ),
+
+
                       SizedBox(height: 5,),
                       FlatButton(child: Text('Resend',style: TextStyle(fontSize: 15,color: (_counter!=0)?Colors.grey[350]:Colors.grey[450]),),onPressed:(_counter==0)?()=>onPressed2(phone, context):null,),
                       SizedBox(height: 5,),
@@ -125,6 +128,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>  {
     );
   }
   onPressed() async {
+
 
 
           final code = _codeController.text.trim();
