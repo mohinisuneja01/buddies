@@ -1,13 +1,24 @@
+
+import 'package:buddies/screens/userDetail.dart';
 import 'package:buddies/widgets/button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileSignup extends StatefulWidget {
+
   @override
   _ProfileSignupState createState() => _ProfileSignupState();
 }
 
 class _ProfileSignupState extends State<ProfileSignup> {
 var _nameController=TextEditingController();
+@override
+  void initState() {
+  var firestoredb=Firestore.instance.collection('users');
+    super.initState();
+  }
+FirebaseUser user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +101,7 @@ child: IconButton(icon:Image.asset('lib/images/PlusIcon.png',) ,onPressed: (){},
                 ),
               ),
               SizedBox(height: 18,),
-              CustomButton2(context, "Next", (){})
+              CustomButton2(context, "Next", () async=>toFormScreen())
             ],
           ),
         ),
@@ -113,5 +124,13 @@ child: IconButton(icon:Image.asset('lib/images/PlusIcon.png',) ,onPressed: (){},
       ),
 
     );
+  }
+
+  Future toFormScreen() async{
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FormScreen()));
+    await Firestore.instance.collection('users').add({
+      "Name":_nameController
+    });
+
   }
 }

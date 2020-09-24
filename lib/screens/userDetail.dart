@@ -1,5 +1,7 @@
+import 'package:buddies/widgets/button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:grouped_buttons/grouped_buttons.dart';
 class FormScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -10,33 +12,52 @@ class FormScreen extends StatefulWidget {
 class FormScreenState extends State<FormScreen> {
   String _name;
   String _email;
-  String _password;
-  String _url;
-  String _phoneNumber;
-  String _calories;
+  String _gender;
+  String _institute;
+  String _class;
+  String _dob;
+  String _about;
+  bool _isChecked = true;
+  String _currText = '';
+  List<String> _checked= [];
+
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _buildName() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Name'),
-      maxLength: 10,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Name is Required';
-        }
+  Widget _buildgender() {
+    return Row(
+      children: <Widget>[
+        CheckboxGroup(
+          orientation: GroupedButtonsOrientation.HORIZONTAL,
+          margin: const EdgeInsets.only(left: 12.0),
+          onSelected: (List selected) => setState((){
+            _checked = selected;
 
-        return null;
-      },
-      onSaved: (String value) {
-        _name = value;
-      },
+          }),
+          labels: <String>[
+"Male","Female","Other"
+          ],
+          checked: _checked,
+          itemBuilder: (Checkbox cb, Text txt, int i){
+            if(_checked.length>0)
+              _checked.removeAt(0);
+            print(_checked);
+            return Row(
+              children: <Widget>[
+
+                cb,
+                txt,
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 
   Widget _buildEmail() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Email'),
+      decoration: InputDecoration(labelText: 'Email',labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
         if (value.isEmpty) {
           return 'Email is Required';
@@ -56,43 +77,22 @@ class FormScreenState extends State<FormScreen> {
     );
   }
 
-  Widget _buildPassword() {
+
+  Widget _buildDateofBirth() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Password'),
-      keyboardType: TextInputType.visiblePassword,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Password is Required';
-        }
+      decoration: InputDecoration(labelText: 'Date of Birth',hintText: "DD/MM/YYYY",hintStyle: TextStyle(fontSize: 14),labelStyle: TextStyle(fontSize: 14)),
 
-        return null;
-      },
+
+
       onSaved: (String value) {
-        _password = value;
-      },
-    );
-  }
-
-  Widget _builURL() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Url'),
-      keyboardType: TextInputType.url,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'URL is Required';
-        }
-
-        return null;
-      },
-      onSaved: (String value) {
-        _url = value;
+        _dob = value;
       },
     );
   }
 
   Widget _buildPhoneNumber() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Phone number'),
+      decoration: InputDecoration(labelText: 'Phone number',labelStyle: TextStyle(fontSize: 14)),
       keyboardType: TextInputType.phone,
       validator: (String value) {
         if (value.isEmpty) {
@@ -102,74 +102,110 @@ class FormScreenState extends State<FormScreen> {
         return null;
       },
       onSaved: (String value) {
-        _url = value;
+       // _url = value;
       },
     );
   }
 
-  Widget _buildCalories() {
+  Widget _buildInstitute() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Calories'),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        int calories = int.tryParse(value);
+      decoration: InputDecoration(labelText: 'School/College',labelStyle: TextStyle(fontSize: 14)),
 
-        if (calories == null || calories <= 0) {
-          return 'Calories must be greater than 0';
-        }
 
-        return null;
-      },
       onSaved: (String value) {
-        _calories = value;
+        _institute = value;
       },
     );
   }
+  Widget _buildClass() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Major/Class',labelStyle: TextStyle(fontSize: 14)),
+
+
+      onSaved: (String value) {
+        _class = value;
+      },
+    );
+  }
+  Widget _buildAbout() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'A Little about yourself',labelStyle: TextStyle(fontSize: 14)),
+
+
+      onSaved: (String value) {
+        _about = value;
+      },
+    );
+  }
+  var firedb;
+  CollectionReference firedb2;
+@override
+  void initState() {
+   firedb=Firestore.instance.collection('users').snapshots();
+   firedb2=Firestore.instance.collection('users');
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Form Demo")),
-      body: Container(
+
+      body:StreamBuilder(
+        stream: firedb,
+        builder: (context,snapshot){
+          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+          return Container(
         margin: EdgeInsets.all(24),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _buildName(),
-              _buildEmail(),
-              _buildPassword(),
-              _builURL(),
-              _buildPhoneNumber(),
-              _buildCalories(),
-              SizedBox(height: 100),
-              RaisedButton(
-                child: Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.blue, fontSize: 16),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30,left: 10,right: 10),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                Column(
+
+                  children: <Widget>[
+                    _buildEmail(),
+                    SizedBox(height: 10,),
+                    _buildgender() ,
+                    SizedBox(height: 20,),
+                    _buildDateofBirth(),
+                    SizedBox(height: 10,),
+                    _buildInstitute(),
+                    SizedBox(height: 10,),
+                    _buildClass(),
+                    SizedBox(height: 10,),
+                    _buildAbout(),
+                    SizedBox(height: 50),
+
+                    CustomButton2(context, 'Next', () async{
+                      _formKey.currentState.save();
+                      await firedb2.add({'Name':_name,
+                        'about':_about,
+                        'class':_class,
+                        'dob':_dob,
+                        'email':_email,
+                        'gender':_gender,
+                        'institution':_institute
+
+                      });
+                    })
+
+                  ],
                 ),
-                onPressed: () {
-                  if (!_formKey.currentState.validate()) {
-                    return;
-                  }
+              ],
 
-                  _formKey.currentState.save();
-
-                  print(_name);
-                  print(_email);
-                  print(_phoneNumber);
-                  print(_url);
-                  print(_password);
-                  print(_calories);
-
-                  //Send to API
-                },
-              )
-            ],
+            ),
           ),
         ),
-      ),
+      );        },
+      )
+
     );
   }
+
+
 }
