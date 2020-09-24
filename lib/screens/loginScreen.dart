@@ -22,7 +22,6 @@ class loginScreen extends StatefulWidget {
 class _loginScreenState extends State<loginScreen> {
   GoogleSignInAccount _currentUser;
   String _contactText;
-
   final _phoneController = TextEditingController();
   TextEditingController userNameController=TextEditingController();
   bool _isloggedIn = false;

@@ -1,15 +1,30 @@
 import 'package:buddies/widgets/button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:buddies/screens/interestsScreen.dart';
 class FormScreen extends StatefulWidget {
+  String name;
+  FirebaseUser user;
+  FormScreen({this.name,this.user}){
+    print(user);
+  }
   @override
   State<StatefulWidget> createState() {
-    return FormScreenState();
+    return FormScreenState(name: name,user:user);
   }
 }
 
 class FormScreenState extends State<FormScreen> {
+  String name;
+  FirebaseUser user;
+  FormScreenState({this.name,this.user}){
+    _name=name;
+    if(user!=null)
+      _email=user.email;
+  }
+
   String _name;
   String _email;
   String _gender;
@@ -31,7 +46,15 @@ class FormScreenState extends State<FormScreen> {
           orientation: GroupedButtonsOrientation.HORIZONTAL,
           margin: const EdgeInsets.only(left: 12.0),
           onSelected: (List selected) => setState((){
-            _checked = selected;
+            try{
+            _checked[0] = selected[1??0];}
+            catch(e){
+              print(e);
+              _checked=selected;
+            }
+            finally{
+              _gender=_checked[0]??null;
+            }
 
           }),
           labels: <String>[
@@ -39,8 +62,12 @@ class FormScreenState extends State<FormScreen> {
           ],
           checked: _checked,
           itemBuilder: (Checkbox cb, Text txt, int i){
-            if(_checked.length>0)
-              _checked.removeAt(0);
+//              if(_checked.length>0)
+//                setState(() {
+//                  _checked.clear();
+//                });
+
+
             print(_checked);
             return Row(
               children: <Widget>[
@@ -57,6 +84,8 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildEmail() {
     return TextFormField(
+      initialValue: user?.email??null,
+      enabled: (user==null)?true:false,
       decoration: InputDecoration(labelText: 'Email',labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
         if (value.isEmpty) {
@@ -80,6 +109,8 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildDateofBirth() {
     return TextFormField(
+      keyboardType: TextInputType.datetime,
+
       decoration: InputDecoration(labelText: 'Date of Birth',hintText: "DD/MM/YYYY",hintStyle: TextStyle(fontSize: 14),labelStyle: TextStyle(fontSize: 14)),
 
 
@@ -150,6 +181,7 @@ class FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
 
       body:StreamBuilder(
@@ -182,7 +214,8 @@ class FormScreenState extends State<FormScreen> {
                     SizedBox(height: 50),
 
                     CustomButton2(context, 'Next', () async{
-                      _formKey.currentState.save();
+                      if(_formKey.currentState.validate())
+                      {_formKey.currentState.save();
                       await firedb2.add({'Name':_name,
                         'about':_about,
                         'class':_class,
@@ -191,8 +224,9 @@ class FormScreenState extends State<FormScreen> {
                         'gender':_gender,
                         'institution':_institute
 
-                      });
-                    })
+                      }).then((value) {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>InterestsScreen()));});
+                    }})
 
                   ],
                 ),

@@ -363,7 +363,7 @@ class LoginGoogle extends StatefulWidget {
 class _LoginGoogleState extends State<LoginGoogle> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+FirebaseUser user;
   Future<FirebaseUser> _handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
@@ -403,11 +403,13 @@ class _LoginGoogleState extends State<LoginGoogle> {
             GestureDetector(
               onTap: () {
                 _handleSignIn()
-                    .then((FirebaseUser user) => print(user))
+                    .then((FirebaseUser User) {
+                      user=User;
+                })
                     .catchError((e) => print(e));
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileSignup()),
+                  MaterialPageRoute(builder: (context) => ProfileSignup(user: user,)),
                       (Route<dynamic> route) => false,
                 );
               },
