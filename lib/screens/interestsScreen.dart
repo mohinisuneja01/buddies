@@ -15,3 +15,4 @@ class _InterestsScreenState extends State<InterestsScreen> {
     );
   }
 }
+
