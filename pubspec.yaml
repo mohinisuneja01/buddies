@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  image_picker: ^0.6.7+11
   google_sign_in: ^4.5.4
   flutter_facebook_auth: ^0.3.1+1
   flutter_facebook_login: ^3.0.0
@@ -62,6 +63,8 @@ flutter:
     - lib/images/buddies.png
     - lib/images/BG3.png
     - lib/images/PlusIcon.png
+    - lib/images/gallery.png
+    - lib/images/camera.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

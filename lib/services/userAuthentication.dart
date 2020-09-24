@@ -30,8 +30,9 @@ Future<bool> loginUser(String phone, BuildContext context) async {
       },
       codeSent: (String verificationId, [int forceResendingToken]) =>
           Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-              AuthenticationScreen(verificationId: verificationId,auth:_auth))),
-      codeAutoRetrievalTimeout: null);
+              AuthenticationScreen(verificationId: verificationId,auth:_auth,phone:phone))),
+      codeAutoRetrievalTimeout: null
+  );
 
 
 
