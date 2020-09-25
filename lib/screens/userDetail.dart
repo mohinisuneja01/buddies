@@ -6,23 +6,19 @@ import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:buddies/screens/interestsScreen.dart';
 class FormScreen extends StatefulWidget {
   String name;
-  FirebaseUser user;
-  FormScreen({this.name,this.user}){
-    print(user);
-  }
+  FormScreen({this.name});
   @override
   State<StatefulWidget> createState() {
-    return FormScreenState(name: name,user:user);
+    return FormScreenState(name: name);
   }
 }
 
 class FormScreenState extends State<FormScreen> {
   String name;
   FirebaseUser user;
-  FormScreenState({this.name,this.user}){
-    _name=name;
-    if(user!=null)
-      _email=user.email;
+  FirebaseAuth _auth;
+  FormScreenState({this.name}) {
+    _name = name;
   }
 
   String _name;
@@ -47,7 +43,7 @@ class FormScreenState extends State<FormScreen> {
           margin: const EdgeInsets.only(left: 12.0),
           onSelected: (List selected) => setState((){
             try{
-            _checked[0] = selected[1??0];}
+              _checked[0] = selected[1??0];}
             catch(e){
               print(e);
               _checked=selected;
@@ -58,7 +54,7 @@ class FormScreenState extends State<FormScreen> {
 
           }),
           labels: <String>[
-"Male","Female","Other"
+            "Male","Female","Other"
           ],
           checked: _checked,
           itemBuilder: (Checkbox cb, Text txt, int i){
@@ -133,7 +129,7 @@ class FormScreenState extends State<FormScreen> {
         return null;
       },
       onSaved: (String value) {
-       // _url = value;
+        // _url = value;
       },
     );
   }
@@ -170,10 +166,12 @@ class FormScreenState extends State<FormScreen> {
   }
   var firedb;
   CollectionReference firedb2;
-@override
+  @override
   void initState() {
-   firedb=Firestore.instance.collection('users').snapshots();
-   firedb2=Firestore.instance.collection('users');
+    firedb=Firestore.instance.collection('users').snapshots();
+    firedb2=Firestore.instance.collection('users');
+    _auth=FirebaseAuth.instance;
+    getUser();
     super.initState();
   }
 
@@ -184,62 +182,67 @@ class FormScreenState extends State<FormScreen> {
 
     return Scaffold(
 
-      body:StreamBuilder(
-        stream: firedb,
-        builder: (context,snapshot){
-          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
-          return Container(
-        margin: EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30,left: 10,right: 10),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                Column(
+        body:StreamBuilder(
+          stream: firedb,
+          builder: (context,snapshot){
+            if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+            return Container(
+              margin: EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30,left: 10,right: 10),
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      Column(
 
-                  children: <Widget>[
-                    _buildEmail(),
-                    SizedBox(height: 10,),
-                    _buildgender() ,
-                    SizedBox(height: 20,),
-                    _buildDateofBirth(),
-                    SizedBox(height: 10,),
-                    _buildInstitute(),
-                    SizedBox(height: 10,),
-                    _buildClass(),
-                    SizedBox(height: 10,),
-                    _buildAbout(),
-                    SizedBox(height: 50),
+                        children: <Widget>[
+                          _buildEmail(),
+                          SizedBox(height: 10,),
+                          _buildgender() ,
+                          SizedBox(height: 20,),
+                          _buildDateofBirth(),
+                          SizedBox(height: 10,),
+                          _buildInstitute(),
+                          SizedBox(height: 10,),
+                          _buildClass(),
+                          SizedBox(height: 10,),
+                          _buildAbout(),
+                          SizedBox(height: 50),
 
-                    CustomButton2(context, 'Next', () async{
-                      if(_formKey.currentState.validate())
-                      {_formKey.currentState.save();
-                      await firedb2.add({'Name':_name,
-                        'about':_about,
-                        'class':_class,
-                        'dob':_dob,
-                        'email':_email,
-                        'gender':_gender,
-                        'institution':_institute
+                          CustomButton2(context, 'Next', () async{
+                            if(_formKey.currentState.validate())
+                            {_formKey.currentState.save();
+                            await firedb2.add({'Name':_name,
+                              'about':_about,
+                              'class':_class,
+                              'dob':_dob,
+                              'email':_email,
+                              'gender':_gender,
+                              'institution':_institute
 
-                      }).then((value) {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>InterestsScreen()));});
-                    }})
+                            }).then((value) {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>InterestsScreen()));});
+                            }})
 
-                  ],
+                        ],
+                      ),
+                    ],
+
+                  ),
                 ),
-              ],
-
-            ),
-          ),
-        ),
-      );        },
-      )
+              ),
+            );        },
+        )
 
     );
   }
-
+  getUser() async {
+    await _auth.currentUser().then((currUser)
+    {user=currUser;
+    print(user?.email);
+    });
+  }
 
 }
