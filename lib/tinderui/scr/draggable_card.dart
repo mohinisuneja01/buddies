@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fluttery_dart2/layout.dart';
 //import 'package:fluttery/layout.dart';
@@ -10,6 +9,7 @@ enum SlideDirection { left, right, up }
 enum SlideRegion { inNopeRegion, inLikeRegion, inSuperLikeRegion }
 
 class DraggableCard extends StatefulWidget {
+  var imageLink;
   final Widget card;
   final bool isDraggable;
   final SlideDirection slideTo;
@@ -25,7 +25,8 @@ class DraggableCard extends StatefulWidget {
       this.onSlideOutComplete,
       this.slideTo,
       this.slideRegion,
-      this.onSlideRegionUpdate});
+      this.onSlideRegionUpdate,
+      this.imageLink});
   @override
   _DraggableCardState createState() => _DraggableCardState();
 }
@@ -47,7 +48,7 @@ class _DraggableCardState extends State<DraggableCard>
   @override
   void initState() {
     super.initState();
-    print("draggable ${widget.isDraggable}");
+   // print("draggable ${widget.isDraggable}");
 
     slideBackAnimation = new AnimationController(
       duration: const Duration(milliseconds: 1000),
@@ -60,7 +61,7 @@ class _DraggableCardState extends State<DraggableCard>
               Curves.elasticOut.transform(slideBackAnimation.value),
             );
 
-            print("draggable ${widget.isDraggable}");
+           // print("draggable ${widget.isDraggable}\n ${widget.imageLink}");
 
             if (null != widget.onSlideUpdate) {
               widget.onSlideUpdate(cardOffset.distance);
@@ -137,7 +138,7 @@ class _DraggableCardState extends State<DraggableCard>
 //    if (oldWidget.slideRegion == null && widget.slideRegion != null) {
 //      switch (widget.slideRegion) {
 //        case SlideDirection.left:
-//          _slideLeft();
+//          _slideLeft();d32
 //          break;
 //        case SlideDirection.right:
 //          _slideRight();
@@ -536,6 +537,7 @@ class _Draggable1CardState extends State<DraggableCard>
 
   @override
   Widget build(BuildContext context) {
+   // print(widget.imageLink);
     return _buildCardStack();
   }
 

@@ -21,6 +21,7 @@ class _ProfileSignupState extends State<ProfileSignup> {
     assignUser();
   }
   var _nameController=TextEditingController();
+  List imageLinks=List();
   FirebaseUser user;
   bool uploading=false;
   _ProfileSignupState(){
@@ -226,9 +227,12 @@ return null;},
     setState(() {
       uploading=true;
     });
-  uploadFiles([imageFile1,imageFile2,imageFile3,imageFile4,imageFile5],userName).then((_){
+  uploadFiles([imageFile1,imageFile2,imageFile3,imageFile4,imageFile5],userName).then((value){
+    imageLinks=value;
+    print('profilesignup');
+    print(imageLinks);
     uploading=false;
-    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FormScreen(name: _nameController.text)));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FormScreen(name: _nameController.text,imageLinks:imageLinks)));
   });}
   }
 

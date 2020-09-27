@@ -1,3 +1,4 @@
+import 'package:buddies/services/SignOut.dart';
 import 'package:flutter/material.dart';
 class Settings extends StatefulWidget {
   @override
@@ -9,6 +10,11 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Settings"),),
+      body: Center(child:
+        RaisedButton(
+          child: Text('Sign Out'),
+          onPressed: (){firebaseSignOut(context);},
+        ),),
     );
   }
 }

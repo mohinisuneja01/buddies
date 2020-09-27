@@ -1,3 +1,6 @@
+import 'package:buddies/services/currentUser.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:buddies/tinderui/scr/draggable_card.dart';
 import 'package:buddies/tinderui/scr/matches.dart';
@@ -5,22 +8,26 @@ import 'package:buddies/tinderui/scr/profile_card.dart';
 
 class CardStack extends StatefulWidget {
   final MatchEngine matchEngine;
-
   CardStack({Key key, this.matchEngine});
   @override
   _CardStackState createState() => _CardStackState();
 }
 
 class _CardStackState extends State<CardStack> {
+  CollectionReference db1;
   Key _frontCard;
+  int index;
   DateMatch _currentMatch;
   double _nextCardScale = 0.9;
   SlideRegion slideRegion;
 
   @override
   void initState() {
+    index=-1;
     // TODO: implement initState
     super.initState();
+
+
     widget.matchEngine.addListener(_onMatchEngineChange);
     _currentMatch = widget.matchEngine.currentMatch;
     _currentMatch.addListener(_onMatchChange);
@@ -78,7 +85,9 @@ class _CardStackState extends State<CardStack> {
         key: _frontCard,
         profile: widget.matchEngine.currentMatch.profile,
         decision: widget.matchEngine.currentMatch.decision,
-        region: slideRegion);
+        region: slideRegion,
+
+    );
   }
 
   Widget _buildBackCard({bool isDraggable: false}) {
@@ -138,16 +147,21 @@ class _CardStackState extends State<CardStack> {
 
   @override
   Widget build(BuildContext context) {
-    return new Stack(
-      children: <Widget>[
-        new DraggableCard(isDraggable: false, card: _buildBackCard()),
-        new DraggableCard(
-            card: _buildFrontCard(),
-            slideTo: _desiredSlideOutDirection(),
-            onSlideUpdate: _onSlideUpdate,
-            onSlideRegionUpdate: _onSlideRegion,
-            onSlideOutComplete: _onSlideOutComplete)
-      ],
-    );
+    db1=Firestore.instance.collection('users');
+        return new Stack(
+          children: <Widget>[
+new DraggableCard(isDraggable: false, card: _buildBackCard()),
+            new DraggableCard(
+                card: _buildFrontCard(),
+                slideTo: _desiredSlideOutDirection(),
+                onSlideUpdate: _onSlideUpdate,
+                onSlideRegionUpdate: _onSlideRegion,
+                onSlideOutComplete: _onSlideOutComplete,)
+
+          ],
+        );
+      }
+
   }
-}
+
+

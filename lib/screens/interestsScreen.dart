@@ -110,7 +110,7 @@ DocumentReference re;
                 child: CustomButton2(context, "Finish", () async{
                   if(selected.length!=0){
                   if(user!=null)
-                  await firedb.document('${user?.email}').setData({'Interests':selected}).then((value){
+                  await firedb.document('${user?.email}').setData({'Interests':selected,'screenDisplay':'home'},merge: true).then((value){
                     //(user?.email=='')?'${user.phoneNumber}':'${user.email}'
                     Navigator.pushAndRemoveUntil(
                       context,

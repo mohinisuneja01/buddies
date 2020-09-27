@@ -7,18 +7,20 @@ import 'package:buddies/screens/interestsScreen.dart';
 import 'package:buddies/services/currentUser.dart';
 class FormScreen extends StatefulWidget {
   String name;
-  FormScreen({this.name});
+  List imageLinks=List();
+  FormScreen({this.name,this.imageLinks});
   @override
   State<StatefulWidget> createState() {
-    return FormScreenState(name: name);
+    return FormScreenState(name: name,imageLinks:imageLinks);
   }
 }
 
 class FormScreenState extends State<FormScreen> {
+  List imageLinks=List();
   String name;
   FirebaseUser user;
   //FirebaseAuth _auth;
-  FormScreenState({this.name}) {
+  FormScreenState({this.name,this.imageLinks}) {
     _name = name;
   }
 
@@ -244,9 +246,14 @@ class FormScreenState extends State<FormScreen> {
                               'class':_class,
                               'dob':_dob,
                               'gender':_gender,
-                              'institution':_institute
+                              'institution':_institute,
+                              'screenDisplay':'interest',
+                              'imageLinks':imageLinks,
+                              'email':_email
                             },merge: true)
                             .then((value) {
+                              print('userdetailscreen');
+                              print(imageLinks);
                               user.updateEmail(_email);
 
                               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>InterestsScreen()));});

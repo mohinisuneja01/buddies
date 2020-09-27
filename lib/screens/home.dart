@@ -1,3 +1,4 @@
+import 'package:buddies/tinderui/scr/hookup.dart';
 import 'package:buddies/tinderui/tabs/index.dart';
 import 'package:buddies/tinderui/tabs/settings_tab/settings_tab.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,12 @@ class _HomeState extends State<Home> {
  static List<Widget> Screens=[
   HomeBody(),
    Chat(),
-   Index(),
+   HookUp(),
    Notifications(),
    Settings()
 
  ];
- int _currentItem=0;
+ int _currentItem=2;
  String _title;
 
  void _onItemTapped(int index) {

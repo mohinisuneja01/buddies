@@ -1,27 +1,34 @@
+import 'package:buddies/services/currentUser.dart';
+import 'package:buddies/services/uploadFile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:buddies/tinderui/scr/draggable_card.dart';
 import 'package:buddies/tinderui/scr/matches.dart';
 import 'package:buddies/tinderui/scr/photo_browser.dart';
 import 'package:buddies/tinderui/scr/profiles.dart';
 import 'package:buddies/tinderui/utils/images.dart';
-
 class ProfileCard extends StatefulWidget {
   final Profile profile;
   final Decision decision;
   final SlideRegion region;
   final bool isDraggable;
-  const ProfileCard({
+  final imageList;
+   const ProfileCard({
     Key key,
     this.profile,
     this.decision,
     this.region,
     this.isDraggable = true,
+    this.imageList
   }) : super(key: key);
   @override
   _ProfileCardState createState() => _ProfileCardState();
 }
 
 class _ProfileCardState extends State<ProfileCard> {
+  CollectionReference firedb,firedb2;
+  FirebaseUser user;
   Widget _buildPhotos() {
     return new PhotoBrowser(
         photoAssetPaths: widget.profile.photos,visiblePhotoIndex: 0,);
@@ -43,8 +50,10 @@ class _ProfileCardState extends State<ProfileCard> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               new Text(
-                "${widget.profile.name.split(" ")[0]}, ${widget.profile.age}",
-                style: TextStyle(
+         //       "${firedb2.snapshots().elementAt(0)}",
+        //document('${user.email}').get()}, ${widget.profile.age}",
+            widget.profile.name.split(" ")[0]
+           , style: TextStyle(
                     fontSize: 22.0,
                     color: Colors.red[700],
                     fontWeight: FontWeight.bold),
@@ -57,7 +66,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     fontWeight: FontWeight.w400),
               ),
               new Text(
-                widget.profile.location,
+                widget.profile.college,
                 style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.black.withOpacity(0.4),
@@ -72,7 +81,19 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 
   @override
+  void initState() {
+    //_auth=FirebaseAuth.instance;
+    assignUser();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    firedb2=Firestore.instance.collection('users');
+
+//    print('build card card');
+//    print(widget.imageList);
+
     return Scaffold(
       backgroundColor: Colors.white70,
       body: Material(
@@ -124,6 +145,19 @@ class _ProfileCardState extends State<ProfileCard> {
       ),
     );
   }
+
+
+  Future<Widget> _getImage(BuildContext context, List image) async {
+    Image m;
+//    await FireStorageService.loadImage(context, image).then((downloadUrl) {
+//      m = Image.network(
+//        downloadUrl.toString(),
+//        fit: BoxFit.scaleDown,
+//      );
+//    });
+    return m;
+  }
+
 
   Widget _buildRegionIndicator() {
     switch (widget.region) {
@@ -228,4 +262,8 @@ class _ProfileCardState extends State<ProfileCard> {
       ),
     );
   }
+  assignUser() async {
+    user=await getUser();
+  }
+
 }

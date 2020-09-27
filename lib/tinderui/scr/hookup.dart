@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:buddies/tinderui/scr/card_stack.dart';
 import 'package:buddies/tinderui/scr/draggable_card.dart';
@@ -21,6 +22,7 @@ class HookUp extends StatefulWidget {
 
 class _HookUpState extends State<HookUp>
     with AutomaticKeepAliveClientMixin<HookUp> {
+  Stream<QuerySnapshot> db;
   Widget _buildBottomBar() {
     return BottomAppBar(
       color: Colors.transparent,
@@ -70,12 +72,51 @@ class _HookUpState extends State<HookUp>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print((demoProfile?.elementAt(2)?.email)??0);
+
     return Scaffold(
-      body: new CardStack(matchEngine: matchEngine),
+      body: Column(
+        children: <Widget>[
+          Expanded(child: new CardStack(matchEngine: matchEngine)),
+    StreamBuilder(
+    stream: db,
+    builder: (context,snapshot){
+//      print('start1'+'  '+'${snapshot.data.documents.length}');
+      if(snapshot.hasData)
+    return Container(
+      height: 0,
+      child: ListView.builder(itemCount:snapshot.data.documents.length,
+      itemBuilder: (context,int index){
+        print('start2');
+      var ds = snapshot.data.documents[index].data;
+        demoProfile.add(
+            Profile(
+                name:ds['Name'],
+                college: ds['institution'],
+                bio: ds['about'],
+                photos: ds['imageLinks'],
+                email: ds['email']
+            )
+        );
+      print("added");
+      return SizedBox(height:0,);
+      }),
+    );
+    return SizedBox(height: 0,);
+    },
+
+    )
+
+        ],
+      ),
       bottomNavigationBar: _buildBottomBar(),
     );
   }
-
+@override
+  void initState() {
+  db=Firestore.instance.collection('users').snapshots();
+  super.initState();
+  }
   @override
   void dispose() {
     super.dispose();
@@ -84,4 +125,5 @@ class _HookUpState extends State<HookUp>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
 }
