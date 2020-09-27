@@ -32,13 +32,14 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>  {
       _timer.cancel();
     }
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
+      if(this.mounted)
+      {setState(() {
         if (_counter > 0) {
           _counter--;
         } else {
           _timer.cancel();
         }
-      });
+      });}
     });
   }
  String phone;
@@ -59,7 +60,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>  {
           constraints: BoxConstraints.expand(),
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('lib/images/BG3.png',),fit: BoxFit.cover
+              image: AssetImage('lib/images/bg3.png',),fit: BoxFit.cover
             ),
           ),
           child: Column(

@@ -1,23 +1,40 @@
+import 'package:buddies/screens/home.dart';
+import 'package:buddies/services/currentUser.dart';
 import 'package:buddies/tinderui/tabs/index.dart';
 import 'package:buddies/widgets/button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
+import 'package:buddies/widgets/showToast.dart';
 import 'package:flutter/material.dart';
 
 class InterestsScreen extends StatefulWidget {
+
   @override
   _InterestsScreenState createState() => _InterestsScreenState();
 }
 
 class _InterestsScreenState extends State<InterestsScreen> {
+  FirebaseUser user;
   TextEditingController categoryController=TextEditingController();
   List<String> categoryList=['Sports','Science','Technology','Literature'];
   List<List<int>> imagelistList=[[1,6,7,1,6,7],[8,9,3,8,9,3],[13,12,11,13,12,11],[13,14,15,13,14,15]];
   String category;
   List<String>  selected=[];
 TextEditingController text=TextEditingController();
+CollectionReference firedb;
+@override
+  void initState() {
+  assignUser();
+  firedb=Firestore.instance.collection('users');
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
+DocumentReference re;
+
     return Scaffold(
       body: ListView(
         children: <Widget>[
@@ -90,12 +107,19 @@ TextEditingController text=TextEditingController();
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: CustomButton2(context, "Finish", (){
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Index()),
-                        (Route<dynamic> route) => false,
-                  );
+                child: CustomButton2(context, "Finish", () async{
+                  if(selected.length!=0){
+                  if(user!=null)
+                  await firedb.document('${user?.email}').setData({'Interests':selected}).then((value){
+                    //(user?.email=='')?'${user.phoneNumber}':'${user.email}'
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false,
+                    );
+                  });}
+                  else
+                    showToast(context,"Please add atleast one interest");
                 }),
               ),
 
@@ -113,7 +137,6 @@ Widget CustomCard(String image,String category){
     return Container(
 padding: EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
-
         borderRadius: BorderRadius.circular(15)
       ),
       //height: 100,
@@ -163,5 +186,11 @@ Widget CustomCatgoryImageRow(String categoryName,List<int> imagePath){
         );
 
 }
+  assignUser() async {
+
+    user=await getUser();
+  }
+
+
 }
 

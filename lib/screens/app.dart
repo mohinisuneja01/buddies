@@ -1,5 +1,7 @@
+import 'package:buddies/tinderui/scr/profile_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'home.dart';
 import 'loginScreen.dart';
 import 'package:buddies/screens/profileSignup.dart';
 class MyApp extends StatefulWidget {
@@ -26,7 +28,7 @@ FirebaseAuth _auth;
     await _auth.currentUser().then((user)
     {
       setState(() {
-        homeScreen=(user==null)? loginScreen():ProfileSignup();
+        homeScreen=(user==null)? loginScreen():Home();
       });
     });
   }

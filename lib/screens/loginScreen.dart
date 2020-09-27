@@ -41,6 +41,7 @@ class _loginScreenState extends State<loginScreen> {
         //    padding: EdgeInsets.only(top: 180,left: 20,right: 20,bottom: 180),
             child: Column(
               children: <Widget>[
+
             Center(
             child: Padding(
               padding: const EdgeInsets.only(top:45.0),

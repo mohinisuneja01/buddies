@@ -18,7 +18,7 @@ class _IndexState extends State<Index> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: _buildHookUpAppBar(),
+      //appBar: _buildHookUpAppBar(),
       body: _buildTabsLayout(),
     );
   }
@@ -41,7 +41,7 @@ class _IndexState extends State<Index> {
         child: new SafeArea(
           child: new Container(
             //margin: const EdgeInsets.all(5.0),
-            padding: const EdgeInsets.all(5.0),
+            //padding: const EdgeInsets.all(5.0),
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,

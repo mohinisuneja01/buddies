@@ -24,90 +24,100 @@ class ProfileCard extends StatefulWidget {
 class _ProfileCardState extends State<ProfileCard> {
   Widget _buildPhotos() {
     return new PhotoBrowser(
-        photoAssetPaths: widget.profile.photos, visiblePhotoIndex: 0);
+        photoAssetPaths: widget.profile.photos,visiblePhotoIndex: 0,);
   }
 
   Widget _buildProfileSynopsis() {
-    return new Positioned(
-      left: 0.0,
-      right: 0.0,
-      bottom: 0.0,
-      child: new Container(
-        decoration: new BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black.withAlpha(180)])),
-        padding: const EdgeInsets.all(24.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            new Expanded(
-                child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new Text(
-                  "${widget.profile.name.split(" ")[0]}, ${widget.profile.age}",
-                  style: TextStyle(
-                      fontSize: 22.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                ),
-                new Text(
-                  widget.profile.bio,
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400),
-                ),
-                new Text(
-                  widget.profile.location,
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400),
-                ),
-              ],
-            )),
-            new Icon(
-              Icons.info,
-              color: Colors.white,
-            )
-          ],
-        ),
+    return new Container(
+      decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      padding: const EdgeInsets.all(24.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          new Expanded(
+              child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              new Text(
+                "${widget.profile.name.split(" ")[0]}, ${widget.profile.age}",
+                style: TextStyle(
+                    fontSize: 22.0,
+                    color: Colors.red[700],
+                    fontWeight: FontWeight.bold),
+              ),
+              new Text(
+                widget.profile.bio,
+                style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black.withOpacity(0.4),
+                    fontWeight: FontWeight.w400),
+              ),
+              new Text(
+                widget.profile.location,
+                style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black.withOpacity(0.4),
+                    fontWeight: FontWeight.w400),
+              ),
+            ],
+          )),
+
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10.0), boxShadow: [
-        new BoxShadow(
-            color: Colors.black.withAlpha(50),
-            blurRadius: 5.0,
-            spreadRadius: 2.0)
-      ]),
-      child: new ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: new Material(
-          child: new Stack(
-            fit: StackFit.expand,
+    return Scaffold(
+      backgroundColor: Colors.white70,
+      body: Material(
+        borderRadius: BorderRadius.circular(20.0),
+        elevation: 10,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Column(
             children: <Widget>[
-              _buildPhotos(),
-              _buildProfileSynopsis(),
-              widget.isDraggable == false
-                  ? new Container(
-                      color: Colors.transparent,
-                    )
-                  : _buildRegionIndicator(),
-              widget.isDraggable == false
-                  ? new Container(
-                      color: Colors.transparent,
-                    )
-                  : _buildDecisionIndicator()
+              Container(
+                height: MediaQuery.of(context).size.height*0.4,
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20.0),
+//                        boxShadow: [
+//                  new BoxShadow(
+//                      color: Colors.black.withAlpha(50),
+//                      blurRadius: 5.0,
+//                      spreadRadius: 2.0)]
+                     ),
+                child: new ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: new Material(
+                    borderRadius: BorderRadius.circular(20),
+                    child: new Stack(
+//                fit: StackFit.expand,
+                      children: <Widget>[
+                        _buildPhotos(),
+                        widget.isDraggable == false
+                            ? new Container(
+                                color: Colors.transparent,
+                              )
+                            : _buildRegionIndicator(),
+                        widget.isDraggable == false
+                            ? new Container(
+                                color: Colors.transparent,
+                              )
+                            : _buildDecisionIndicator()
+                      ],
+                    ),
+                  ),
+                ),
+              ),    _buildProfileSynopsis(),
             ],
           ),
         ),

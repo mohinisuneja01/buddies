@@ -87,13 +87,13 @@ class _PhotoBrowserState extends State<PhotoBrowser> {
         ),
 
         //photo indicator
-        new Positioned(
-            top: 0.0,
-            right: 0.0,
-            left: 0.0,
-            child: new SelectedPhotoIndicator(
-                photoCount: widget.photoAssetPaths.length,
-                visiblePhotoIndex: visiblePhotoIndex)),
+//        new Positioned(
+//            top: 0.0,
+//            right: 0.0,
+//            left: 0.0,
+//            child: new SelectedPhotoIndicator(
+//                photoCount: widget.photoAssetPaths.length,
+//                visiblePhotoIndex: visiblePhotoIndex)),
 
         //photo controls
         _buildPhotoControls()

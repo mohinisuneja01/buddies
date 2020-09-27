@@ -16,7 +16,7 @@ class _SettingsTabState extends State<SettingsTab>
   int currentPage = 0;
   int currentColor = 0;
   bool reverse = false;
-  PageController _controller = new PageController();
+  //PageController _controller = new PageController();
   Timer _pageChangeTimer;
   Timer colorTimer;
 
@@ -24,27 +24,27 @@ class _SettingsTabState extends State<SettingsTab>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _pageChanger();
+    //_pageChanger();
   }
 
   @override
   void dispose() {
     _pageChangeTimer.cancel();
-    _controller.dispose();
+    //_controller.dispose();
     super.dispose();
   }
 
-  void _pageChanger() {
-    _pageChangeTimer = Timer.periodic(Duration(seconds: 2), (_) {
-      if (reverse == false && currentPage < hookUpPlusList.length - 1) {
-        _controller.nextPage(
-            duration: Duration(milliseconds: 5), curve: Curves.easeIn);
-      } else if (reverse == true && currentPage <= hookUpPlusList.length - 1) {
-        _controller.previousPage(
-            duration: Duration(milliseconds: 5), curve: Curves.easeOut);
-      }
-    });
-  }
+//  void _pageChanger() {
+//    _pageChangeTimer = Timer.periodic(Duration(seconds: 2), (_) {
+//      if (reverse == false && currentPage < hookUpPlusList.length - 1) {
+//        _controller.nextPage(
+//            duration: Duration(milliseconds: 5), curve: Curves.easeIn);
+//      } else if (reverse == true && currentPage <= hookUpPlusList.length - 1) {
+//        _controller.previousPage(
+//            duration: Duration(milliseconds: 5), curve: Curves.easeOut);
+//      }
+//    });
+//  }
 
   void _onPageChanged(int value) {
     //print("$value $reverse");
@@ -174,7 +174,7 @@ class _SettingsTabState extends State<SettingsTab>
           indicatorColor: Colors.grey.withOpacity(0.5),
           align: IndicatorAlign.bottom,
           pageView: new PageView.builder(
-              controller: _controller,
+//              controller: _controller,
               onPageChanged: _onPageChanged,
               itemCount: hookUpPlusList.length,
               itemBuilder: (c, index) {

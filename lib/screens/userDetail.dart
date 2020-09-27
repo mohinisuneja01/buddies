@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:buddies/screens/interestsScreen.dart';
+import 'package:buddies/services/currentUser.dart';
 class FormScreen extends StatefulWidget {
   String name;
   FormScreen({this.name});
@@ -16,7 +17,7 @@ class FormScreen extends StatefulWidget {
 class FormScreenState extends State<FormScreen> {
   String name;
   FirebaseUser user;
-  FirebaseAuth _auth;
+  //FirebaseAuth _auth;
   FormScreenState({this.name}) {
     _name = name;
   }
@@ -79,9 +80,10 @@ class FormScreenState extends State<FormScreen> {
   }
 
   Widget _buildEmail() {
+   print(user.phoneNumber);
     return TextFormField(
       initialValue: user?.email??null,
-      enabled: (user==null)?true:false,
+      enabled: (user?.email==null||user.email=='')?true:false,
       decoration: InputDecoration(labelText: 'Email',labelStyle: TextStyle(fontSize: 14)),
       validator: (String value) {
         if (value.isEmpty) {
@@ -105,7 +107,14 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildDateofBirth() {
     return TextFormField(
-      keyboardType: TextInputType.datetime,
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'DOB is Required';
+          }
+          return null;
+          }
+
+ ,         keyboardType: TextInputType.datetime,
 
       decoration: InputDecoration(labelText: 'Date of Birth',hintText: "DD/MM/YYYY",hintStyle: TextStyle(fontSize: 14),labelStyle: TextStyle(fontSize: 14)),
 
@@ -137,7 +146,12 @@ class FormScreenState extends State<FormScreen> {
   Widget _buildInstitute() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'School/College',labelStyle: TextStyle(fontSize: 14)),
-
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'School/College is required';
+          }
+          return null;
+        },
 
       onSaved: (String value) {
         _institute = value;
@@ -147,7 +161,12 @@ class FormScreenState extends State<FormScreen> {
   Widget _buildClass() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Major/Class',labelStyle: TextStyle(fontSize: 14)),
-
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Major/Class is required';
+          }
+          return null;
+        },
 
       onSaved: (String value) {
         _class = value;
@@ -157,7 +176,12 @@ class FormScreenState extends State<FormScreen> {
   Widget _buildAbout() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'A Little about yourself',labelStyle: TextStyle(fontSize: 14)),
-
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'It is Required';
+          }
+          return null;
+        },
 
       onSaved: (String value) {
         _about = value;
@@ -170,8 +194,8 @@ class FormScreenState extends State<FormScreen> {
   void initState() {
     firedb=Firestore.instance.collection('users').snapshots();
     firedb2=Firestore.instance.collection('users');
-    _auth=FirebaseAuth.instance;
-    getUser();
+    //_auth=FirebaseAuth.instance;
+   assignUser();
     super.initState();
   }
 
@@ -212,17 +236,19 @@ class FormScreenState extends State<FormScreen> {
                           SizedBox(height: 50),
 
                           CustomButton2(context, 'Next', () async{
+                             print(user.email??user.phoneNumber);
                             if(_formKey.currentState.validate())
                             {_formKey.currentState.save();
-                            await firedb2.add({'Name':_name,
+                            await firedb2.document(_email).setData({'Name':_name,
                               'about':_about,
                               'class':_class,
                               'dob':_dob,
-                              'email':_email,
                               'gender':_gender,
                               'institution':_institute
+                            },merge: true)
+                            .then((value) {
+                              user.updateEmail(_email);
 
-                            }).then((value) {
                               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>InterestsScreen()));});
                             }})
 
@@ -238,11 +264,14 @@ class FormScreenState extends State<FormScreen> {
 
     );
   }
-  getUser() async {
-    await _auth.currentUser().then((currUser)
-    {user=currUser;
-    print(user?.email);
-    });
+//  getUser() async {
+//    await _auth.currentUser().then((currUser)
+//    {user=currUser;
+//    print(user?.email);
+//    });
+//  }
+  assignUser() async {
+    user=await getUser();
   }
 
 }

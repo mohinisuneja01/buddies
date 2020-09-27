@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  firebase_storage: ^3.0.3
 
   grouped_buttons: ^1.0.4
 

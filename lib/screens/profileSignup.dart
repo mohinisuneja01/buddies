@@ -1,16 +1,28 @@
-
+import 'package:buddies/services/uploadFile.dart';
 import 'package:buddies/screens/userDetail.dart';
 import 'package:buddies/widgets/button.dart';
+import 'package:buddies/widgets/showToast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:buddies/services/currentUser.dart';
 
 class ProfileSignup extends StatefulWidget {
   @override
   _ProfileSignupState createState() => _ProfileSignupState();
 }
 class _ProfileSignupState extends State<ProfileSignup> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    assignUser();
+  }
   var _nameController=TextEditingController();
+  FirebaseUser user;
+  bool uploading=false;
   _ProfileSignupState(){
   }
   File imageFile1,imageFile2,imageFile3,imageFile4,imageFile5;
@@ -142,32 +154,41 @@ class _ProfileSignupState extends State<ProfileSignup> {
                     SizedBox(height: 10,),
                     Container(
                       width: MediaQuery.of(context).size.width*0.60,
-                      child: TextField(
-                        keyboardType: TextInputType.text,
-                        cursorColor: Colors.grey,
-                        controller: _nameController,
-                        style: TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
+                      child: Form(
+                        key: _formKey,
+                        child: TextFormField(
+    validator: (String value) {
+    if (value.isEmpty) {
+    return 'Name is Required';
+    }
+    else
+return null;},
+    keyboardType: TextInputType.text,
+                          cursorColor: Colors.grey,
+                          controller: _nameController,
+                          style: TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
 
-                          //contentPadding: EdgeInsets.only(bottom: 0,left: 13,right: 9),
-                          hintText: 'Enter your name',
-                          hintStyle: TextStyle(color: Colors.grey[400]),
-                          enabledBorder:UnderlineInputBorder (
-                              borderSide: BorderSide(color: Colors.black,width:1 )
-                          ),
-                          focusedBorder: UnderlineInputBorder (
-                              borderSide: BorderSide(color: Colors.black,width:1 )
+                            //contentPadding: EdgeInsets.only(bottom: 0,left: 13,right: 9),
+                            hintText: 'Enter your name',
+                            hintStyle: TextStyle(color: Colors.grey[400]),
+                            enabledBorder:UnderlineInputBorder (
+                                borderSide: BorderSide(color: Colors.black,width:1 )
+                            ),
+                            focusedBorder: UnderlineInputBorder (
+                                borderSide: BorderSide(color: Colors.black,width:1 )
+                            ),
+
                           ),
 
                         ),
-
                       ),
 
                     ),
 
                     SizedBox(height: 18,),
-                    CustomButton2(context, "Next", () async=>toFormScreen())
+                    (uploading==false)?CustomButton2(context, "Next", () async=>toFormScreen()):CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pinkAccent),)
                   ],
                 )   ],
 
@@ -197,7 +218,18 @@ class _ProfileSignupState extends State<ProfileSignup> {
 
 
   Future toFormScreen() async{
+    if((imageFile1==null)&&(imageFile2==null)&&(imageFile3==null)&&(imageFile4==null)&&(imageFile5==null))
+      showToast(context,"Please at least add one image");
+    if((_formKey.currentState.validate())&&((imageFile1!=null)||(imageFile2!=null)||(imageFile3!=null)||(imageFile4!=null)||(imageFile5!=null)))
+    {_formKey.currentState.save();
+      String userName=(user.phoneNumber=='')?(user.email):(user.phoneNumber);
+    setState(() {
+      uploading=true;
+    });
+  uploadFiles([imageFile1,imageFile2,imageFile3,imageFile4,imageFile5],userName).then((_){
+    uploading=false;
     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FormScreen(name: _nameController.text)));
+  });}
   }
 
 
@@ -269,5 +301,9 @@ class _ProfileSignupState extends State<ProfileSignup> {
     }
   }
 
+  assignUser() async {
+
+    user=await getUser();
+  }
 }
 

@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 GoogleLogin(BuildContext context){
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseUser currentUser;
 
   Future<FirebaseUser> _handleSignIn() async {
   final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -27,7 +26,7 @@ GoogleLogin(BuildContext context){
 
   _handleSignIn()
       .then((FirebaseUser User) {
-    currentUser=User;
+
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => ProfileSignup()),
